@@ -1,0 +1,16 @@
+.home-page{ 
+    /* position: fixed; */
+  
+    /* border: 1px solid red; */
+}
+.banner-image{
+    height: 70vh;
+    /* border: 1px solid black; */
+}
+img{
+    /* height:; */
+    height:70vh; 
+    width:100%;
+    object-fit: cover;
+}
+

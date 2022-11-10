@@ -1,0 +1,14 @@
+.signup-container{
+    background-image: url(./images/foodnew.jpeg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    /* width: 100vw; */
+    object-fit: contain;
+    opacity: 0.8;
+    /* overflow-x: hidden; */
+}
+
+input{
+    margin-bottom: 6px;
+}
