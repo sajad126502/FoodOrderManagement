@@ -23,8 +23,11 @@ function UserOrderdProducts() {
   }, [navigate]);
 
   useEffect(() => {
-    dispatch(getUserSpecificOrders());
-  }, [dispatch]);
+    setTimeout(()=>{
+
+      dispatch(getUserSpecificOrders());
+    },1000)
+  }, [dispatch,navigate]);
 
   const { orders } = useSelector(state => state.userSpecificOrders);
   return (

@@ -24,8 +24,8 @@ export const getUserSpecificOrders = () => async dispatch => {
         const user = JSON.parse(localStorage.getItem("user"));
         dispatch({ type: START_LOADING });
         const response = await axios.post(`/api/order/userspecificorders`, user, config);
-        dispatch({ type: STOP_LOADING });
         dispatch({ type: USER_SPECIFIC_ORDERS, payload: response.data.orders });
+        dispatch({ type: STOP_LOADING });
     } catch (err) {
 
         dispatch({ type: STOP_LOADING });

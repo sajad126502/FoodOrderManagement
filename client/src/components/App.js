@@ -17,6 +17,7 @@ import ViewAdminOrders from './ViewAdminOrders';
 import AdminOrderDetailView from './AdminOrderDetailView';
 import UserOrderdProducts from './UserOrderdProducts';
 import Footer from './Footer';
+import { ChakraProvider } from '@chakra-ui/react'
 
 
 const App = () => {
@@ -27,12 +28,12 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<Home></Home>} />
         <Route exact path="/shop" element={<Shop></Shop>} />
-        <Route exact path="/orders" element={<UserOrderdProducts></UserOrderdProducts>} />
-        <Route exact path="/cart" element={<Cart></Cart>} />
+        <Route exact path="/orders" element={<ChakraProvider><UserOrderdProducts></UserOrderdProducts></ChakraProvider>} />
+        <Route exact path="/cart" element={<ChakraProvider><Cart></Cart></ChakraProvider>} />
         <Route exact path="/product/:productId" element={<Product></Product>} />
         <Route exact path="/shipping" element={<Shipping></Shipping>} />
         <Route exact path="/orderSummary" element={<OrderSummary></OrderSummary>} />
-        <Route exact path="/payment" element={<Payment></Payment>} />
+        <Route exact path="/payment" element={<ChakraProvider><Payment></Payment></ChakraProvider>} />
         <Route exact  path="/signin" element={<Signin></Signin>} />
         <Route exact  path="/signup" element={<Signup></Signup>} />
         <Route exact  path="/admin/dashboard" element={<AdminDashboard></AdminDashboard>} />

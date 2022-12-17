@@ -1,5 +1,8 @@
-const Order = require('../models/Order');
+const Order = require("../models/Order")
 const ObjectId = require('mongodb').ObjectId;
+const Product = require('../models/Product');
+
+
 
 exports.orderController = async (req, res) => {
     console.log("order controller hits......", req.body);
@@ -9,8 +12,20 @@ exports.orderController = async (req, res) => {
     // console.log(JSON.stringify(cart));
 
     try {
-
+        const cartId = cart[0]._id
+        const count = parseInt(cart[0].count)
+        console.log(count)
         const order = new Order();
+        const product = await Product.findById(cartId)
+        if (!(product.productQuantity >=count)) {
+            console.log("ueriweyrywireywiyriwyrwiyriwyriwyriwyrw")
+            res.status(400).json({
+                errorMessage: `plz reduce your quantity only ${product.productQuantity} items are left`
+            })
+            return
+        }
+        await Product.findByIdAndUpdate(cartId, { productQuantity: product.productQuantity - count }, { new: true })
+        console.log(product)
         order.userId = user._id;
         order.shippingDetails = JSON.stringify(shippingAddress);
         order.orderdProducts = JSON.stringify(cart)
@@ -19,7 +34,7 @@ exports.orderController = async (req, res) => {
         res.status(200).json({
             successMessage: `Order Placed Sucessfully`,
         });
-    } catch(err){
+    } catch (err) {
         console.log(err, "productController error");
         res.status(500).json({
             errorMessage: `Please try again later`
@@ -86,7 +101,7 @@ exports.getUserSpecificOrders = async (req, res) => {
     try {
         console.log("===========================");
         const user = req.body;
-         const orders= await Order.find({userId: ObjectId(user._id)});
+        const orders= await Order.find({userId: ObjectId(user._id)}).sort({"createdAt":-1});
         res.json({orders});
     } catch (err) {
         res.status(500).json({

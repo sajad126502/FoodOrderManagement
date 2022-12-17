@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import ProgressBar from './ProgressBar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { isAuthenticated } from '../helpers/auth';
+import { showErrorMsg } from '../helpers/message';
+import { getUserSpecificOrders } from '../redux/actions/orderActions';
+import { useToast } from '@chakra-ui/react'
 
 const Payment = () => {
 	const [paymentMethod, setPaymentMethod] = useState({ 'paymentMode': "POD" })
 	const { shippingAddress } = useSelector(state => state.order);
 	const { cart } = useSelector(state => state.cart);
 	const { loading } = useSelector(state => state.loading);
+	const [res, setRes] = useState([])
 	const user = JSON.parse(localStorage.getItem('user'));
-	const navigate=useNavigate();
+	const toast = useToast()
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (isAuthenticated() && isAuthenticated().role === 1) {
@@ -27,7 +34,6 @@ const Payment = () => {
 			navigate('/signin');
 		}
 	}, [navigate]);
-
 	const handleSubmit = () => {
 		try {
 
@@ -43,14 +49,40 @@ const Payment = () => {
 				}
 			}
 			const response = axios.post('api/order', data, config);
-			if(!loading){
+			response.then((response) => {
 
-				 navigate("/orders")
-			}
-			
+console.log("FHDSGHFKLDJAHFKLAHFLKHAKFLHASLDKFHSDLAKFHDSFKHDIUOPSFHUDS")
+
+				toast({
+					title: 'success',
+					description: `${"Order placed SuccessFully"}`,
+					status: 'success',
+					duration: 3000,
+					isClosable: true,
+					position:'top-left'
+				})
+				
+
+				navigate("/orders")
+
+				console.log(response)
+			}).catch((e) => {
+				const eMsg = JSON.parse(e.request.response).errorMessage
+				toast({
+					title: 'error',
+					description: `${eMsg}`,
+					status: 'warning',
+					duration: 3000,
+					isClosable: true,
+					position: 'top-left'
+				})
+				navigate("/cart")
+
+			})
+
 		}
-		catch(e){
-
+		catch (e) {
+			console.log(e + "dsadhgaskh")
 		}
 	}
 	const handleChange = (e) => {
@@ -58,7 +90,7 @@ const Payment = () => {
 
 	}
 	return (
-		<section className='m-4 p-2'>
+		<section className='m-4'>
 			<div className='jumbotron p-1'>
 				<h5>
 					<ProgressBar step1 step2 step3 />
@@ -77,12 +109,11 @@ const Payment = () => {
 									type='radio'
 									name='paymentMethod'
 									value='DC'
-									disabled
 									onChange={handleChange}
 
 								/>
 								<label className='form-check-label'>
-									Debit Card 
+									Debit Card
 								</label>
 							</div>
 							<div className='form-check'>

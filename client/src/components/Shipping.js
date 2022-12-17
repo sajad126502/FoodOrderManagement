@@ -17,6 +17,7 @@ const Shipping = () => {
 	const [city, setCity] = useState('');
 	const [state, setState] = useState('');
 	const [phone, setPhone] = useState('');
+	
 
 	useEffect(() => {
 		if (isAuthenticated() && isAuthenticated().role === 1) {
@@ -93,8 +94,11 @@ const Shipping = () => {
 									className='form-control'
 									value={address}
 									required
-									onChange={evt =>
-										setAddress(evt.target.value)
+									onChange={e =>{
+										//validation to allow only alphabets
+										const result = e.target.value.replace(/[^a-z]/gi, '');
+										setAddress(result)
+									}
 									}
 								/>
 							</div>
@@ -117,12 +121,18 @@ const Shipping = () => {
 								<div className='form-group col-md-4'>
 									<label htmlFor='inputCity'>City</label>
 									<input
-										type='text'
+										
+										
 										className='form-control'
 										value={city}
 										required
-										onChange={evt =>
-											setCity(evt.target.value)
+										type="text"
+										
+										onChange={e =>
+											{
+                                                const result = e.target.value.replace(/[^a-z]/gi, '');
+												setCity(result)
+											}
 										}
 									/>
 								</div>
@@ -150,7 +160,8 @@ const Shipping = () => {
 								<div className='form-group col-md-4'>
 									<label htmlFor='inputZip'>Phone</label>
 									<input
-										type='text'
+										type='number'
+										pattern="[0-9]"
 										className='form-control'
 										value={phone}
 										required
